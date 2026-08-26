@@ -21,3 +21,9 @@ data/raw/*.csv
 data/processed/*.csv
 models/*.joblib
 logs/*.jsonl
+
+# Same reasoning for Week 4 monitoring: the drifted input batch is
+# regenerable (simulate_drift.py, fixed DRIFT_SEED). The monitoring log
+# (predictions_vs_actuals.jsonl), report, retrain decision, and plot ARE
+# committed below -- they're the actual Week 4 deliverable evidence.
+monitoring/drifted_batch_raw.csv
