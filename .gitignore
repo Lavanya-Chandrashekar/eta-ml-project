@@ -27,3 +27,6 @@ logs/*.jsonl
 # (predictions_vs_actuals.jsonl), report, retrain decision, and plot ARE
 # committed below -- they're the actual Week 4 deliverable evidence.
 monitoring/drifted_batch_raw.csv
+Thumbs.db
+Thumbs.db
+Thumbs.db

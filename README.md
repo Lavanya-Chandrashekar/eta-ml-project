@@ -1,4 +1,4 @@
-# ETA / Delivery Time Prediction — End-to-End ML Pipeline
+﻿# ETA / Delivery Time Prediction — End-to-End ML Pipeline
 
 **Course:** Machine Learning Engineering (PCAM* ZC412) — Mini-Project EC-1
 **Flavor:** A — Delivery / Ride ETA Prediction
@@ -68,7 +68,9 @@ eta-ml-project/
 ## Setup
 
 ```bash
-python -m venv venv && source venv/bin/activate   # or venv\Scripts\activate on Windows
+# Requires Python 3.12 — pandas 2.2.2 has no wheels for 3.13+
+py -3.12 -m venv venv && source venv/Scripts/activate   # Windows Git Bash
+# or: python3.12 -m venv venv && source venv/bin/activate   # macOS/Linux
 pip install -r requirements.txt
 ```
 
@@ -79,7 +81,9 @@ pip install -r requirements.txt
 python src/data/generate_synthetic_data.py
 python src/data/validate_data.py
 python src/features/build_features.py
-python src/data/version_dataset.py
+python src/data/version_dataset.py data/raw/trips_raw.csv --tag v1-raw
+python src/data/version_dataset.py data/processed/trips_validated.csv --tag v1-validated
+python src/data/version_dataset.py data/processed/trips_features.csv --tag v1-features
 
 # Week 2 — train & compare models (4 tracked runs)
 python src/models/train.py

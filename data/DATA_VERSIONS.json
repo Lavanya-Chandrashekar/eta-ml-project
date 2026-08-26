@@ -1,10 +1,10 @@
 {
   "versions": [
     {
-      "tag": "v1-raw",
-      "file": "raw/trips_raw.csv",
-      "sha256": "d40987cc9258752456828b5e764e5dbb5012477bb0922b46829475861cf011df",
-      "rows": 15075,
+      "tag": "v1-validated",
+      "file": "processed\\trips_validated.csv",
+      "sha256": "eff397bc9789d442a96f308bd59a0aebb7db205e47148b6af2ed658238b5943f",
+      "rows": 14505,
       "columns": [
         "trip_id",
         "pickup_datetime",
@@ -16,13 +16,13 @@
         "temperature_c",
         "trip_duration_min"
       ],
-      "created_at": "2026-08-17T18:15:18.871386Z",
-      "git_commit": null
+      "created_at": "2026-08-26T21:03:20.120741+00:00",
+      "git_commit": "945e655"
     },
     {
       "tag": "v1-features",
-      "file": "processed/trips_features.csv",
-      "sha256": "1ca74b3a7a62c54f0f14f260ab54ae6f7f30d3d489f4968a853f94764ff3ecd9",
+      "file": "processed\\trips_features.csv",
+      "sha256": "abe2a2bf5e5003fc91dd0c0f94d342bb2ef4a50f096c095cd5019fbbc1ff072a",
       "rows": 14505,
       "columns": [
         "trip_id",
@@ -42,14 +42,14 @@
         "time_of_day_bucket_morning",
         "time_of_day_bucket_night"
       ],
-      "created_at": "2026-08-17T18:15:27.176121Z",
-      "git_commit": "c1275f6"
+      "created_at": "2026-08-26T21:04:24.852913+00:00",
+      "git_commit": "945e655"
     },
     {
-      "tag": "v1-validated",
-      "file": "processed/trips_validated.csv",
-      "sha256": "80299c70b9ab580f16162c7a7cdae3ca8971f7a6d8e98af317f0fdfc10021d35",
-      "rows": 14505,
+      "tag": "v1-raw",
+      "file": "raw\\trips_raw.csv",
+      "sha256": "0378a17864ebbfbe31065010a60ae5620358aca9e33e9235f66cacfc4b897889",
+      "rows": 15075,
       "columns": [
         "trip_id",
         "pickup_datetime",
@@ -61,8 +61,8 @@
         "temperature_c",
         "trip_duration_min"
       ],
-      "created_at": "2026-08-18T19:31:55.032019+00:00",
-      "git_commit": "5600c5a"
+      "created_at": "2026-08-26T21:05:21.018518+00:00",
+      "git_commit": "945e655"
     }
   ]
 }

@@ -3,7 +3,7 @@
     {
       "tag": "latest-best-model",
       "file": "best_model.joblib",
-      "sha256": "47ff64507ad4af113f77000718af820dc60d9adc466948d1ac95bdc40c58bb16",
+      "sha256": "d378a4de33348fa90bae637a4e379c86fbdf6f3920542dc81b8efa76bc068912",
       "size_bytes": 247240,
       "metrics": {
         "mae_minutes": 3.3183164656778326,
@@ -13,7 +13,7 @@
       "params": {
         "run_name": "gradient_boosting_default"
       },
-      "git_commit": null
+      "git_commit": "945e655"
     }
   ]
 }
