@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-08-23T19:32:47.435265+00:00",
+  "deployed_model": "gradient_boosting_default",
+  "n_scored_rows": 3000,
+  "feature_drift_psi": {
+    "distance_km": 0.0034,
+    "hour_of_day": 0.7727,
+    "day_of_week": 0.1181,
+    "is_weekend": 0.0018,
+    "is_rush_hour": 0.6105,
+    "temperature_c": 0.1639,
+    "weather_clear": 0.2497,
+    "weather_fog": 0.0016,
+    "weather_rain": 0.0863,
+    "weather_storm": 0.1535,
+    "time_of_day_bucket_afternoon": 0.1983,
+    "time_of_day_bucket_evening": 0.4366,
+    "time_of_day_bucket_morning": 0.0176,
+    "time_of_day_bucket_night": 0.2832
+  },
+  "performance_drift": {
+    "baseline": {
+      "mae_minutes": 3.3183164656778326,
+      "rmse_minutes": 4.1869510950765285,
+      "r2": 0.9386654374821787
+    },
+    "current_on_drifted_batch": {
+      "mae_minutes": 18.294123801168723,
+      "rmse_minutes": 23.57835556152474
+    },
+    "rmse_relative_change": 5.6314,
+    "mae_relative_change": 5.5131
+  },
+  "retrain_decision": {
+    "retrain_triggered": true,
+    "reasons": [
+      "RMSE degraded 5.63x baseline (threshold 1.25x)",
+      "4 features with major distribution shift (PSI>=0.25): ['hour_of_day', 'is_rush_hour', 'time_of_day_bucket_evening', 'time_of_day_bucket_night'] (threshold: 2)"
+    ],
+    "major_shift_features": [
+      "hour_of_day",
+      "is_rush_hour",
+      "time_of_day_bucket_evening",
+      "time_of_day_bucket_night"
+    ],
+    "moderate_shift_features": [
+      "day_of_week",
+      "temperature_c",
+      "weather_clear",
+      "weather_storm",
+      "time_of_day_bucket_afternoon"
+    ],
+    "policy": {
+      "rmse_degradation_trigger": 1.25,
+      "psi_major_shift_threshold": 0.25,
+      "n_major_shift_features_to_trigger": 2
+    }
+  }
+}

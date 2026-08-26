@@ -1,0 +1,25 @@
+{
+  "retrain_triggered": true,
+  "reasons": [
+    "RMSE degraded 5.63x baseline (threshold 1.25x)",
+    "4 features with major distribution shift (PSI>=0.25): ['hour_of_day', 'is_rush_hour', 'time_of_day_bucket_evening', 'time_of_day_bucket_night'] (threshold: 2)"
+  ],
+  "major_shift_features": [
+    "hour_of_day",
+    "is_rush_hour",
+    "time_of_day_bucket_evening",
+    "time_of_day_bucket_night"
+  ],
+  "moderate_shift_features": [
+    "day_of_week",
+    "temperature_c",
+    "weather_clear",
+    "weather_storm",
+    "time_of_day_bucket_afternoon"
+  ],
+  "policy": {
+    "rmse_degradation_trigger": 1.25,
+    "psi_major_shift_threshold": 0.25,
+    "n_major_shift_features_to_trigger": 2
+  }
+}
