@@ -1,0 +1,9 @@
+Requests: 200 (sequential, single client, single Flask dev-server worker)
+Mean latency:   16.78 ms
+Median latency: 12.51 ms
+p95 latency:    31.98 ms
+p99 latency:    43.62 ms
+Min / Max:      3.44 / 374.97 ms
+Naive throughput ceiling (sequential): 59.6 req/s
+
+Note: this is Flask's single-threaded development server, deliberately used as-is for this assignment. For real throughput beyond a demo, run behind a production WSGI server (gunicorn/uvicorn workers) with multiple worker processes -- see README 'Productionizing' notes.

@@ -1,0 +1,94 @@
+{
+  "experiment_name": "eta-prediction",
+  "random_seed": 42,
+  "feature_columns": [
+    "distance_km",
+    "hour_of_day",
+    "day_of_week",
+    "is_weekend",
+    "is_rush_hour",
+    "temperature_c",
+    "weather_clear",
+    "weather_fog",
+    "weather_rain",
+    "weather_storm",
+    "time_of_day_bucket_afternoon",
+    "time_of_day_bucket_evening",
+    "time_of_day_bucket_morning",
+    "time_of_day_bucket_night"
+  ],
+  "selection_metric": "rmse_minutes (lower is better)",
+  "results": [
+    {
+      "run_name": "linear_regression",
+      "params": {
+        "model": "LinearRegression",
+        "seed": 42,
+        "n_train": 11604,
+        "n_test": 2901
+      },
+      "metrics": {
+        "mae_minutes": 4.0424595737635425,
+        "rmse_minutes": 5.298118442024548,
+        "r2": 0.9017906534650755
+      }
+    },
+    {
+      "run_name": "gradient_boosting_default",
+      "params": {
+        "model": "HistGradientBoostingRegressor",
+        "max_depth": "None (default)",
+        "learning_rate": 0.1,
+        "max_iter": 100,
+        "seed": 42,
+        "n_train": 11604,
+        "n_test": 2901
+      },
+      "metrics": {
+        "mae_minutes": 3.3183164656778326,
+        "rmse_minutes": 4.1869510950765285,
+        "r2": 0.9386654374821787
+      }
+    },
+    {
+      "run_name": "gradient_boosting_tuned_shallow",
+      "params": {
+        "model": "HistGradientBoostingRegressor",
+        "max_depth": 4,
+        "learning_rate": 0.1,
+        "max_iter": 150,
+        "seed": 42,
+        "n_train": 11604,
+        "n_test": 2901
+      },
+      "metrics": {
+        "mae_minutes": 3.3214464559569787,
+        "rmse_minutes": 4.1893416772338234,
+        "r2": 0.9385953783073502
+      }
+    },
+    {
+      "run_name": "gradient_boosting_tuned_deep",
+      "params": {
+        "model": "HistGradientBoostingRegressor",
+        "max_depth": 8,
+        "learning_rate": 0.05,
+        "max_iter": 300,
+        "seed": 42,
+        "n_train": 11604,
+        "n_test": 2901
+      },
+      "metrics": {
+        "mae_minutes": 3.324176890399594,
+        "rmse_minutes": 4.193025924208749,
+        "r2": 0.9384873282669515
+      }
+    }
+  ],
+  "best_model": "gradient_boosting_default",
+  "best_model_metrics": {
+    "mae_minutes": 3.3183164656778326,
+    "rmse_minutes": 4.1869510950765285,
+    "r2": 0.9386654374821787
+  }
+}

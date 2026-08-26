@@ -1,0 +1,23 @@
+__pycache__/
+*.pyc
+venv/
+.venv/
+*.egg-info/
+.pytest_cache/
+mlruns_local/
+mlruns/
+*.log
+.DS_Store
+.ipynb_checkpoints/
+
+# Deliberate design choice: raw/processed data and trained model binaries are
+# NOT committed to git. Both are large/binary artifacts that don't diff
+# meaningfully in git, and both are fully, deterministically regenerable
+# (fixed RANDOM_SEED end-to-end) via the pipeline scripts. Lineage and
+# integrity are tracked instead via content-hash manifests that ARE
+# committed: data/DATA_VERSIONS.json and models/MODEL_VERSIONS.json.
+# Regenerate everything with: see README "Reproduce from scratch".
+data/raw/*.csv
+data/processed/*.csv
+models/*.joblib
+logs/*.jsonl

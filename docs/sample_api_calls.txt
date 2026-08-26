@@ -1,0 +1,29 @@
+=== 1. Health check ===
+$ curl http://127.0.0.1:5000/health
+{"model_loaded":true,"model_version":1787084927889370250,"n_features":14,"status":"ok"}
+
+
+=== 2. Valid prediction request ===
+$ curl -X POST http://127.0.0.1:5000/predict -H "Content-Type: application/json" -d @sample_request_valid.json
+{"latency_ms":6.48,"model_version":1787084927889370250,"predicted_duration_min":19.96,"request_id":"5722ac4ccbb3"}
+
+
+=== 3. Same trip, clear weather + off-peak hour (for comparison) ===
+{"latency_ms":3.62,"model_version":1787084927889370250,"predicted_duration_min":16.01,"request_id":"145201885aaa"}
+
+
+=== 4. Missing required field -> 422 ===
+{"details":[{"input":{"dropoff_lat":12.98,"dropoff_lon":77.63,"pickup_datetime":"2025-03-15T18:30:00","pickup_lon":77.6},"loc":["pickup_lat"],"msg":"Field required","type":"missing"}],"error":"Input validation failed","request_id":"9fca2014af6a"}
+
+HTTP 422
+
+=== 5. Invalid weather value -> 422 ===
+{"details":[{"ctx":{"error":"weather must be one of ['clear', 'fog', 'rain', 'storm', 'unknown']"},"input":"tornado","loc":["weather"],"msg":"Value error, weather must be one of ['clear', 'fog', 'rain', 'storm', 'unknown']","type":"value_error"}],"error":"Input validation failed","request_id":"370375408cf8"}
+
+HTTP 422
+
+=== 6. Malformed JSON -> 400 ===
+{"error":"Request body must be valid JSON","request_id":"8a442c9ceaf0"}
+
+HTTP 400
+

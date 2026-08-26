@@ -1,0 +1,19 @@
+{
+  "versions": [
+    {
+      "tag": "latest-best-model",
+      "file": "best_model.joblib",
+      "sha256": "47ff64507ad4af113f77000718af820dc60d9adc466948d1ac95bdc40c58bb16",
+      "size_bytes": 247240,
+      "metrics": {
+        "mae_minutes": 3.3183164656778326,
+        "rmse_minutes": 4.1869510950765285,
+        "r2": 0.9386654374821787
+      },
+      "params": {
+        "run_name": "gradient_boosting_default"
+      },
+      "git_commit": null
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "info": {
+    "name": "ETA Prediction API",
+    "description": "Week 3 (M4) deliverable: sample requests for the /health and /predict endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:5000" }
+  ],
+  "item": [
+    {
+      "name": "Health check",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/health"
+      }
+    },
+    {
+      "name": "Predict - valid trip (rain, rush hour)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/predict",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"pickup_datetime\": \"2025-03-15T18:30:00\",\n  \"pickup_lat\": 12.95,\n  \"pickup_lon\": 77.60,\n  \"dropoff_lat\": 12.98,\n  \"dropoff_lon\": 77.63,\n  \"weather\": \"rain\",\n  \"temperature_c\": 24.0\n}"
+        }
+      }
+    },
+    {
+      "name": "Predict - valid trip (clear, off-peak)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/predict",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"pickup_datetime\": \"2025-03-15T11:00:00\",\n  \"pickup_lat\": 12.95,\n  \"pickup_lon\": 77.60,\n  \"dropoff_lat\": 12.98,\n  \"dropoff_lon\": 77.63,\n  \"weather\": \"clear\",\n  \"temperature_c\": 24.0\n}"
+        }
+      }
+    },
+    {
+      "name": "Predict - missing required field (expect 422)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/predict",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"pickup_datetime\": \"2025-03-15T18:30:00\",\n  \"pickup_lon\": 77.60,\n  \"dropoff_lat\": 12.98,\n  \"dropoff_lon\": 77.63\n}"
+        }
+      }
+    },
+    {
+      "name": "Predict - invalid weather enum (expect 422)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/predict",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"pickup_datetime\": \"2025-03-15T18:30:00\",\n  \"pickup_lat\": 12.95,\n  \"pickup_lon\": 77.60,\n  \"dropoff_lat\": 12.98,\n  \"dropoff_lon\": 77.63,\n  \"weather\": \"tornado\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Predict - malformed JSON body (expect 400)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/predict",
+        "body": {
+          "mode": "raw",
+          "raw": "not json at all"
+        }
+      }
+    }
+  ]
+}

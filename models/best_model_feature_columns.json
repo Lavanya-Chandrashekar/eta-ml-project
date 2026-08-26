@@ -1,0 +1,16 @@
+[
+  "distance_km",
+  "hour_of_day",
+  "day_of_week",
+  "is_weekend",
+  "is_rush_hour",
+  "temperature_c",
+  "weather_clear",
+  "weather_fog",
+  "weather_rain",
+  "weather_storm",
+  "time_of_day_bucket_afternoon",
+  "time_of_day_bucket_evening",
+  "time_of_day_bucket_morning",
+  "time_of_day_bucket_night"
+]

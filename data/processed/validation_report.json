@@ -1,0 +1,16 @@
+{
+  "validated_at": "2026-08-18T19:31:54.417020+00:00",
+  "input_rows": 15075,
+  "checks": {
+    "invalid_timestamps": 150,
+    "missing_gps_pings": 225,
+    "out_of_range_coordinates": 75,
+    "invalid_duration": 45,
+    "duplicate_rows": 75,
+    "missing_weather_imputed": 0,
+    "missing_temperature_imputed": 0
+  },
+  "rows_dropped": 570,
+  "output_rows": 14505,
+  "pass_rate": 0.9622
+}

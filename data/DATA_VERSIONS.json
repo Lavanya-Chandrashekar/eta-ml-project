@@ -1,0 +1,68 @@
+{
+  "versions": [
+    {
+      "tag": "v1-raw",
+      "file": "raw/trips_raw.csv",
+      "sha256": "d40987cc9258752456828b5e764e5dbb5012477bb0922b46829475861cf011df",
+      "rows": 15075,
+      "columns": [
+        "trip_id",
+        "pickup_datetime",
+        "pickup_lat",
+        "pickup_lon",
+        "dropoff_lat",
+        "dropoff_lon",
+        "weather",
+        "temperature_c",
+        "trip_duration_min"
+      ],
+      "created_at": "2026-08-17T18:15:18.871386Z",
+      "git_commit": null
+    },
+    {
+      "tag": "v1-features",
+      "file": "processed/trips_features.csv",
+      "sha256": "1ca74b3a7a62c54f0f14f260ab54ae6f7f30d3d489f4968a853f94764ff3ecd9",
+      "rows": 14505,
+      "columns": [
+        "trip_id",
+        "distance_km",
+        "hour_of_day",
+        "day_of_week",
+        "is_weekend",
+        "is_rush_hour",
+        "temperature_c",
+        "trip_duration_min",
+        "weather_clear",
+        "weather_fog",
+        "weather_rain",
+        "weather_storm",
+        "time_of_day_bucket_afternoon",
+        "time_of_day_bucket_evening",
+        "time_of_day_bucket_morning",
+        "time_of_day_bucket_night"
+      ],
+      "created_at": "2026-08-17T18:15:27.176121Z",
+      "git_commit": "c1275f6"
+    },
+    {
+      "tag": "v1-validated",
+      "file": "processed/trips_validated.csv",
+      "sha256": "80299c70b9ab580f16162c7a7cdae3ca8971f7a6d8e98af317f0fdfc10021d35",
+      "rows": 14505,
+      "columns": [
+        "trip_id",
+        "pickup_datetime",
+        "pickup_lat",
+        "pickup_lon",
+        "dropoff_lat",
+        "dropoff_lon",
+        "weather",
+        "temperature_c",
+        "trip_duration_min"
+      ],
+      "created_at": "2026-08-18T19:31:55.032019+00:00",
+      "git_commit": "5600c5a"
+    }
+  ]
+}
