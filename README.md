@@ -235,15 +235,6 @@ recommended. Full numbers: `monitoring/monitoring_report.json`; decision and
 its stated reasons: `monitoring/RETRAIN_DECISION.json`; visual:
 `monitoring/monitoring_report.png`.
 
-## Demo
-
-A 5–7 minute walkthrough covers, in order: (1) the validation report and
-`reports/model_comparison.png`; (2) the API — `/health`, a valid `/predict`
-call, and a validation error showing the 422 with field-level detail; (3) the
-prediction log that feeds monitoring; (4) `monitoring_report.png`, pointing
-out the four PSI bars crossing the major-shift line and the retrain decision
-in `RETRAIN_DECISION.json`; (5) the test suite, 29 tests passing.
-
 ## Design Notes & Trade-offs
 
 - **Synthetic data over Kaggle NYC Taxi** — explicitly permitted by the
