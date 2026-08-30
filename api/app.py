@@ -147,5 +147,40 @@ def predict():
     })
 
 
+@app.get("/form")
+def predict_form():
+    return r"""<!doctype html>
+<html><body style="font-family:system-ui;max-width:620px;margin:40px auto">
+<h2>ETA Prediction</h2>
+<p>pickup_datetime <input id="dt" value="2025-03-15T18:30:00" size="24"></p>
+<p>pickup_lat <input id="plat" value="12.95"> &nbsp; pickup_lon <input id="plon" value="77.60"></p>
+<p>dropoff_lat <input id="dlat" value="12.98"> &nbsp; dropoff_lon <input id="dlon" value="77.63"></p>
+<p>weather <input id="w" value="rain"> &nbsp; temperature_c <input id="t" value="24.0"></p>
+<button onclick="send()" style="padding:8px 18px">Predict</button>
+<h4 id="status"></h4>
+<pre id="out" style="background:#f4f4f4;padding:12px"></pre>
+<script>
+async function send() {
+  const body = {
+    pickup_datetime: document.getElementById('dt').value,
+    pickup_lat: parseFloat(document.getElementById('plat').value),
+    pickup_lon: parseFloat(document.getElementById('plon').value),
+    dropoff_lat: parseFloat(document.getElementById('dlat').value),
+    dropoff_lon: parseFloat(document.getElementById('dlon').value),
+    weather: document.getElementById('w').value,
+    temperature_c: parseFloat(document.getElementById('t').value)
+  };
+  const r = await fetch('/predict', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(body)
+  });
+  document.getElementById('status').textContent = 'HTTP ' + r.status;
+  document.getElementById('out').textContent = JSON.stringify(await r.json(), null, 2);
+}
+</script>
+</body></html>"""
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
