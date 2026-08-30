@@ -178,11 +178,12 @@ distribution-shift signal — reduce false triggers from any single noisy
 metric, and the second condition lets us flag likely future degradation even
 before enough labelled outcomes exist to measure accuracy directly.
 
-**Result on the simulated surge:** MAE rose from 3.32 → 18.29 min (5.5x
-worse); `hour_of_day` and `is_rush_hour` (and, more loosely,
-`time_of_day_bucket_evening`/`night`) showed major PSI shifts. Both trigger
-conditions fired independently — retrain was correctly recommended. Full
-numbers: `monitoring/monitoring_report.json`; decision:
+**Result on the simulated surge:** MAE rose from 3.32 → 18.29 min and RMSE
+from 4.19 → 23.58 (5.63x baseline); four features crossed the major PSI
+threshold — `hour_of_day` (0.77), `is_rush_hour` (0.61),
+`time_of_day_bucket_evening` (0.44) and `time_of_day_bucket_night` (0.28).
+Both trigger conditions fired independently — retrain was correctly
+recommended. Full numbers: `monitoring/monitoring_report.json`; decision:
 `monitoring/RETRAIN_DECISION.json`; visual: `monitoring/monitoring_report.png`.
 
 ## Demo
