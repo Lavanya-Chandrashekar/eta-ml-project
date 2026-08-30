@@ -13,21 +13,21 @@ trigger.
 
 ```mermaid
 flowchart TD
-    A[trips_raw.csv<br/>synthetic trip generator] --> B[validate_data.py<br/>schema + quality checks]
-    B --> C[data/processed/<br/>trips_validated.csv]
-    C --> D[build_features.py<br/>distance, time, weather features]
-    D --> E[data/processed/<br/>trips_features.csv]
-    E --> F[train.py<br/>LinearRegression vs<br/>HistGradientBoosting x3]
-    F --> G[tracker.py<br/>MLflow / local run tracking]
-    F --> H[models/<br/>best_model.joblib +<br/>feature_columns.json]
-    H --> I[api/app.py<br/>Flask + Pydantic REST API]
-    I --> J[logs/predictions.jsonl<br/>every request logged]
-    H --> K[src/monitoring/<br/>simulate_drift + score_batch]
-    K --> L[monitor.py<br/>PSI feature drift +<br/>performance drift]
-    L --> M{Retrain<br/>trigger?}
-    M -->|RMSE degraded ≥25%<br/>or ≥2 features PSI≥0.25| N[RETRAIN_DECISION.json<br/>retrain_triggered: true]
-    M -->|thresholds not met| O[RETRAIN_DECISION.json<br/>retrain_triggered: false]
-    N -.->|feeds back into| F
+    A["trips_raw.csv<br/>synthetic trip generator"] --> B["validate_data.py<br/>schema + quality checks"]
+    B --> C["data/processed/<br/>trips_validated.csv"]
+    C --> D["build_features.py<br/>distance, time, weather features"]
+    D --> E["data/processed/<br/>trips_features.csv"]
+    E --> F["train.py<br/>LinearRegression vs<br/>HistGradientBoosting x3"]
+    F --> G["tracker.py<br/>MLflow / local run tracking"]
+    F --> H["models/<br/>best_model.joblib +<br/>feature_columns.json"]
+    H --> I["api/app.py<br/>Flask + Pydantic REST API"]
+    I --> J["logs/predictions.jsonl<br/>every request logged"]
+    H --> K["src/monitoring/<br/>simulate_drift + score_batch"]
+    K --> L["monitor.py<br/>PSI feature drift +<br/>performance drift"]
+    L --> M{"Retrain trigger?"}
+    M -->|"RMSE degraded 25%+<br/>or 2+ features PSI 0.25+"| N["RETRAIN_DECISION.json<br/>retrain_triggered = true"]
+    M -->|"thresholds not met"| O["RETRAIN_DECISION.json<br/>retrain_triggered = false"]
+    N -.->|"feeds back into"| F
 
     style H fill:#2980b9,color:#fff
     style I fill:#27ae60,color:#fff
