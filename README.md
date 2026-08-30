@@ -1,4 +1,4 @@
-﻿# ETA / Delivery Time Prediction — End-to-End ML Pipeline
+# ETA / Delivery Time Prediction — End-to-End ML Pipeline
 
 **Course:** Machine Learning Engineering (PCAM* ZC412) — Mini-Project EC-1
 **Flavor:** A — Delivery / Ride ETA Prediction
@@ -52,15 +52,15 @@ eta-ml-project/
 │   ├── features/        # build_features.py, serving_features.py (shared train/serve logic)
 │   ├── models/          # train.py, version_model.py, reproduce_run.py, plot_comparison.py
 │   ├── tracking/        # tracker.py — MLflow-compatible experiment tracker
-│   └── monitoring/       # simulate_drift.py, score_batch.py, monitor.py  (Week 4)
+│   └── monitoring/      # simulate_drift.py, score_batch.py, monitor.py  (Week 4)
 ├── api/                 # app.py (Flask REST API), benchmark.py
 ├── data/                # raw/, processed/, DATA_VERSIONS.json
-├── models/               # trained model artifacts + MODEL_VERSIONS.json
-├── monitoring/            # drift simulation outputs, monitoring_report.{json,png}, RETRAIN_DECISION.json
-├── reports/               # model_comparison.{json,png}
-├── logs/                 # predictions.jsonl (live API request log)
-├── docs/                  # sample_api_calls.txt, latency_benchmark.txt, postman_collection.json
-├── tests/                 # unit tests (pytest / unittest)
+├── models/              # trained model artifacts + MODEL_VERSIONS.json
+├── monitoring/          # drift simulation outputs, monitoring_report.{json,png}, RETRAIN_DECISION.json
+├── reports/             # model_comparison.{json,png}
+├── logs/                # predictions.jsonl (live API request log)
+├── docs/                # sample_api_calls.txt, latency_benchmark.txt, postman_collection.json
+├── tests/               # unit tests (pytest / unittest)
 ├── Dockerfile
 └── requirements.txt
 ```
@@ -103,6 +103,7 @@ python src/monitoring/monitor.py
 ```
 
 Or with Docker (API only):
+
 ```bash
 docker build -t eta-prediction-api .
 docker run -p 5000:5000 -v $(pwd)/logs:/app/logs eta-prediction-api
@@ -115,6 +116,32 @@ python -m pytest tests/ -v
 # or: python -m unittest discover -s tests -v
 ```
 
+## Week 1 — Data Ingestion & Validation
+
+Raw trips pass through an explicit validation layer before anything
+downstream consumes them. Failures are rejected and counted rather than
+silently dropped, so any data loss is visible and auditable
+(`data/processed/validation_report.json`):
+
+| Check | Rows dropped |
+|---|---|
+| Invalid timestamps | 150 |
+| Missing GPS pings | 225 |
+| Out-of-range coordinates | 75 |
+| Invalid duration | 45 |
+| Duplicate rows | 75 |
+| **Total** | **570** |
+
+15,075 raw rows in, 14,505 out — a 96.2% pass rate. Weather and temperature
+imputation logic is in place but was not required on this data (0
+imputations), so missing values are handled by design rather than by
+assuming they will not occur.
+
+Features engineered: haversine distance, hour of day, day of week, weekend
+and rush-hour flags, time-of-day bucket, and one-hot weather with
+temperature. Raw, validated and feature datasets are all versioned via
+`DATA_VERSIONS.json`.
+
 ## Week 2 — Experimentation & Reproducibility
 
 Four tracked runs compared on a held-out test set (RMSE = lower is better):
@@ -126,11 +153,12 @@ Four tracked runs compared on a held-out test set (RMSE = lower is better):
 | gradient_boosting_tuned_shallow | HistGradientBoostingRegressor (depth=4) | 3.32 | 4.19 | 0.939 |
 | gradient_boosting_tuned_deep | HistGradientBoostingRegressor (depth=8, lr=0.05) | 3.32 | 4.19 | 0.938 |
 
-`gradient_boosting_default` was selected as the best model (lowest RMSE). Every
-run's params, metrics, and seed (42, used everywhere for reproducibility) are
-logged via `src/tracking/tracker.py`; `src/models/reproduce_run.py` reproduces
-a chosen run from its logged config. See `reports/model_comparison.json` /
-`.png` for the full comparison.
+`gradient_boosting_default` was selected as the best model (lowest RMSE).
+Tuning did not improve on the default configuration, so the simpler model was
+kept. Every run's params, metrics, and seed (42, used everywhere for
+reproducibility) are logged via `src/tracking/tracker.py`;
+`src/models/reproduce_run.py` reproduces a chosen run from its logged config.
+See `reports/model_comparison.json` / `.png` for the full comparison.
 
 ## Week 3 — Deployment
 
@@ -138,7 +166,9 @@ a chosen run from its logged config. See `reports/model_comparison.json` /
   the offline sandbox this was built in; Pydantic still gives the same
   request-schema validation FastAPI would provide for free — see the
   docstring in `api/app.py`).
-- **Endpoints:** `GET /health`, `POST /predict`.
+- **Endpoints:** `GET /health`, `POST /predict`. A `GET /form` route is also
+  included: a minimal browser client that posts to `/predict`, used for the
+  demo walkthrough only — it adds no prediction logic of its own.
 - **Validation & error handling:** malformed JSON → 400, schema/range
   violations → 422 with field-level detail, unexpected errors → 500 (no
   internals leaked, logged server-side).
@@ -159,41 +189,60 @@ to ~65-75%, storm/rain weather roughly triples, rush-hour congestion
 worsens (1.6x → 2.1x slowdown), and average trip distance rises ~20%.
 
 **Monitoring signals** (`src/monitoring/monitor.py`):
+
 1. **Feature drift — Population Stability Index (PSI)** per feature,
    comparing the drifted batch to the training-time reference distribution.
    `PSI < 0.10` = stable, `0.10–0.25` = moderate shift, `≥0.25` = major
    shift. This is the standard metric used for population monitoring on
-   banking risk models, applied here to ML feature monitoring.
+   banking risk models, applied here to ML feature monitoring. Critically,
+   PSI needs no ground-truth labels, so it flags a problem while predictions
+   are still being served rather than after the fact.
 2. **Performance drift** — MAE/RMSE on the drifted batch vs. the baseline
    test-set metrics recorded in `reports/model_comparison.json`.
 
 **Retraining trigger — rule-based and documented:**
+
 Retrain is triggered if **either**:
-  - RMSE on incoming traffic is ≥1.25x the baseline test RMSE (≥25%
-    relative accuracy degradation), **or**
-  - 2 or more features show a major PSI shift (≥0.25)
+
+- RMSE on incoming traffic is ≥1.25x the baseline test RMSE (≥25% relative
+  accuracy degradation), **or**
+- 2 or more features show a major PSI shift (≥0.25)
 
 Two independent conditions — a direct accuracy signal and a leading
 distribution-shift signal — reduce false triggers from any single noisy
 metric, and the second condition lets us flag likely future degradation even
 before enough labelled outcomes exist to measure accuracy directly.
 
-**Result on the simulated surge:** MAE rose from 3.32 → 18.29 min and RMSE
-from 4.19 → 23.58 (5.63x baseline); four features crossed the major PSI
-threshold — `hour_of_day` (0.77), `is_rush_hour` (0.61),
-`time_of_day_bucket_evening` (0.44) and `time_of_day_bucket_night` (0.28).
+**Result on the simulated surge** (3,000 scored rows): MAE rose from
+3.32 → 18.29 min and RMSE from 4.19 → 23.58 (5.63x baseline). Four features
+crossed the major PSI threshold:
+
+| Feature | PSI | Band |
+|---|---|---|
+| `hour_of_day` | 0.77 | major |
+| `is_rush_hour` | 0.61 | major |
+| `time_of_day_bucket_evening` | 0.44 | major |
+| `time_of_day_bucket_night` | 0.28 | major |
+| `weather_clear` | 0.25 | moderate (borderline) |
+| `distance_km` | 0.003 | stable |
+
+Note the contrast between `hour_of_day` and `distance_km`: the surge changed
+*when* trips happened, not how far they went, and PSI localises that
+precisely rather than merely signalling that something is wrong.
+
 Both trigger conditions fired independently — retrain was correctly
-recommended. Full numbers: `monitoring/monitoring_report.json`; decision:
-`monitoring/RETRAIN_DECISION.json`; visual: `monitoring/monitoring_report.png`.
+recommended. Full numbers: `monitoring/monitoring_report.json`; decision and
+its stated reasons: `monitoring/RETRAIN_DECISION.json`; visual:
+`monitoring/monitoring_report.png`.
 
 ## Demo
 
-A 5–7 minute walkthrough should cover, in order: (1) run the Week 1–2 scripts
-and show `reports/model_comparison.png`; (2) start the API and run a couple
-of `curl` calls from `docs/sample_api_calls.txt`, including a validation
-error; (3) run the three Week 4 scripts and open `monitoring_report.png`,
-pointing out the PSI bars crossing the major-shift line and the retrain
-decision in `RETRAIN_DECISION.json`.
+A 5–7 minute walkthrough covers, in order: (1) the validation report and
+`reports/model_comparison.png`; (2) the API — `/health`, a valid `/predict`
+call, and a validation error showing the 422 with field-level detail; (3) the
+prediction log that feeds monitoring; (4) `monitoring_report.png`, pointing
+out the four PSI bars crossing the major-shift line and the retrain decision
+in `RETRAIN_DECISION.json`; (5) the test suite, 29 tests passing.
 
 ## Design Notes & Trade-offs
 
