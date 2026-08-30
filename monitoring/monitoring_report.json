@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-26T21:39:29.604597+00:00",
+  "generated_at": "2026-08-30T10:09:50.636183+00:00",
   "deployed_model": "gradient_boosting_default",
   "n_scored_rows": 3000,
   "feature_drift_psi": {
